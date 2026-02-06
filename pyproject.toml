@@ -1,0 +1,67 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ituna"
+dynamic = ["version"]
+description = "Tune machine learning models for empirical identifiability and consistency"
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Tobias Schmidt", email = "tobi.schmidt@helmholtz-munich.de"}
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.8"
+dependencies = [
+    "numpy",
+    "torch",
+    "scipy",
+    "scikit-learn",
+    "matplotlib",
+    "pandas",
+    "igraph",
+    "tqdm",
+    "python-dotenv",
+    "filelock>=3.0.0",
+    "typeguard>=3.0.0",
+]
+
+[project.optional-dependencies]
+datajoint = ["datajoint<2"]
+dev = [
+    "pytest>=6.0",
+    "pytest-cov>=2.0",
+    "black>=21.0",
+    "flake8>=3.8",
+    "pre-commit>=3.0",
+    "cebra>=0.5.0",
+    "streamlit>=1.49.1",
+]
+
+
+[tool.setuptools.dynamic]
+version = {attr = "ituna.__version__"}
+
+[tool.setuptools.packages.find]
+exclude = ["third_party*"]
+
+[project.urls]
+Homepage = "https://github.com/dynamical-inference/ituna"
+Repository = "https://github.com/dynamical-inference/ituna.git"
+"Bug Tracker" = "https://github.com/dynamical-inference/ituna/issues"
+
+[project.scripts]
+ituna-fit-distributed = "ituna._backends.scripts.cache_distributed:main"
+ituna-fit-distributed-datajoint = "ituna._backends.scripts.datajoint_distributed:main"

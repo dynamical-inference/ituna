@@ -1,0 +1,103 @@
+from typing import Tuple
+
+import numpy as np
+import torch
+import typeguard
+
+
+@typeguard.typechecked
+def sparse_to_dense(indices: np.ndarray, values: np.ndarray, shape: Tuple[int, ...], fill_value: float = np.nan, symmetric: bool = False) -> np.ndarray:
+    """
+    Convert sparse representation to a dense matrix.
+
+    Parameters
+    ----------
+    indices : array-like of shape (n_pairs, 2)
+        The indices of the non-zero elements.
+    values : array-like of shape (n_pairs,) or (n_pairs, ...)
+        The values of the non-zero elements.
+    shape : tuple of int
+        The shape of the dense matrix.
+    fill_value : float, default=np.nan
+        The value to fill the dense matrix with for unknown elements.
+    symmetric : bool, default=False
+        If True, the dense matrix is assumed to be symmetric, and the values
+        are filled for both (i, j) and (j, i).
+
+    Returns
+    -------
+    numpy.ndarray
+        The dense matrix.
+    """
+    if len(indices) == 0:
+        assert len(values) == 0, "Values must be empty if indices are empty"
+        return np.full(shape, fill_value, dtype=values.dtype)
+
+    assert indices.ndim == 2 and indices.shape[1] == 2, "Indices must be a 2D array with shape (n_pairs, 2)"
+    assert len(indices) == len(values), "Length of indices and values must be the same"
+
+    if symmetric:
+        # Check for duplicate symmetric indices
+        off_diagonal_indices = indices[indices[:, 0] != indices[:, 1]]
+        swapped_indices = off_diagonal_indices[:, ::-1]
+
+        # Create a set of tuples for efficient lookup
+        indices_set = set(map(tuple, off_diagonal_indices))
+
+        for i, j in swapped_indices:
+            if (i, j) in indices_set:
+                raise ValueError(f"Symmetric sparse array cannot contain both ({j}, {i}) and ({i}, {j})")
+
+    dense_array = np.full(shape, fill_value, dtype=values.dtype if np.issubdtype(values.dtype, np.number) else object)
+    for (i, j), value in zip(indices, values):
+        dense_array[i, j] = value
+        if symmetric:
+            dense_array[j, i] = value
+    return dense_array
+
+
+@typeguard.typechecked
+def dense_to_sparse(dense_array: np.ndarray, symmetric: bool = False) -> Tuple[np.ndarray, np.ndarray]:
+    """Convert a dense matrix to a sparse representation.
+    Parameters
+    ----------
+    dense_array : numpy.ndarray
+        The dense matrix.
+    symmetric : bool, default=False
+        If True, the dense matrix is assumed to be symmetric, and only the
+        upper triangular part is converted to sparse.
+    Returns
+    -------
+    Tuple[numpy.ndarray, numpy.ndarray]
+        A tuple containing the indices and values of the non-nan elements.
+    """
+    assert dense_array.ndim >= 2, "Dense array must be at least 2D"
+    if symmetric:
+        assert np.allclose(dense_array, dense_array.T, equal_nan=True), "Dense array must be symmetric"
+
+    nan_mask = ~np.isnan(dense_array)
+    if symmetric:
+        nan_mask &= np.triu(np.ones_like(dense_array, dtype=bool))
+
+    indices = np.argwhere(nan_mask)
+
+    values = dense_array[indices[:, 0], indices[:, 1]]
+    return indices, values
+
+
+def l2_normalize_columns(x: torch.Tensor, y: torch.Tensor, eps: float = 1e-8) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Normalize each column of x and y to unit L2 norm.
+    """
+    x_norm = x / (x.norm(dim=0, keepdim=True) + eps)
+    y_norm = y / (y.norm(dim=0, keepdim=True) + eps)
+    return x_norm, y_norm
+
+
+def mean_center_columns(x: torch.Tensor, y: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Subtract the column-wise mean from x and y.
+    """
+    x_centered = x - x.mean(dim=0, keepdim=True)
+    y_centered = y - y.mean(dim=0, keepdim=True)
+    return x_centered, y_centered

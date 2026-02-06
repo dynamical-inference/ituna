@@ -1,0 +1,2 @@
+# dj_ml_core wheel for full DataJoint support (optional). Install datajoint with: pip install ituna[datajoint]
+third_party/dj_ml_core-0.2.4-py3-none-any.whl
