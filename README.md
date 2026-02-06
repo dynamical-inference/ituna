@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://dynamical-inference.github.io/ituna/)
 [![PyPI version](https://img.shields.io/pypi/v/ituna.svg)](https://pypi.org/project/ituna/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg)](https://pypi.org/project/ituna/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Build](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml)
 
 **Tune machine learning models for empirical identifiability and consistency**
