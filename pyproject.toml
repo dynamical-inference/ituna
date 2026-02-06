@@ -48,6 +48,7 @@ dev = [
     "pre-commit>=3.0",
     "cebra>=0.5.0",
     "streamlit>=1.49.1",
+    "ruff"
 ]
 
 
@@ -59,6 +60,7 @@ exclude = ["third_party*"]
 
 [project.urls]
 Homepage = "https://github.com/dynamical-inference/ituna"
+Documentation = "https://dynamical-inference.github.io/ituna/"
 Repository = "https://github.com/dynamical-inference/ituna.git"
 "Bug Tracker" = "https://github.com/dynamical-inference/ituna/issues"
 

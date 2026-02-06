@@ -18,4 +18,4 @@ __all__ = [
     "_backends",
 ]
 
-__version__ = "0.3.2"
+__version__ = "0.1.0"
