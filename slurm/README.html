@@ -1,0 +1,654 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Slurm Job Submission for itunad &#8212; iTuna Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=f281be69"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'slurm/README';</script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+        
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">iTuna Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../README.html">
+                    🐟iTuna
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../docs/tutorials/quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/tutorials/core.html">Core Concepts</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../docs/tutorials/backends.html">Backends: Caching and Distributed Computing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Demos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../docs/demos/cebra_best_practices.html">Demo: CEBRA Best Practices with iTuna</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/slurm/README.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Slurm Job Submission for itunad</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tl-dr">TL;DR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-installation">1. Conda Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-variables">2. Environment Variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-usage">General Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-specific-scripts">Cluster-specific Scripts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kit-kit-run-sh">KIT (<code class="docutils literal notranslate"><span class="pre">KIT_run.sh</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example">Basic Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-large-batch-jobs">Running Large Batch Jobs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#juwels-juwels-run-sh">JUWELS (<code class="docutils literal notranslate"><span class="pre">JUWELS_run.sh</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Basic Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#slurm-configuration-notes">Slurm Configuration Notes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Running Large Batch Jobs</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#submitting-many-jobs-with-job-arrays">Submitting Many Jobs with Job Arrays</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="slurm-job-submission-for-itunad">
+<h1>Slurm Job Submission for itunad<a class="headerlink" href="#slurm-job-submission-for-itunad" title="Link to this heading">#</a></h1>
+<section id="tl-dr">
+<h2>TL;DR<a class="headerlink" href="#tl-dr" title="Link to this heading">#</a></h2>
+<p>If <code class="docutils literal notranslate"><span class="pre">ituna</span></code> with <code class="docutils literal notranslate"><span class="pre">trigger_type='manual'</span></code> tells you to run a command like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>~/git/ituna/.cache
+</pre></div>
+</div>
+<p>You can run the following command instead to submit the same job to a Slurm cluster. Just prepend <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">slurm/SCRIPT_NAME.sh</span></code> to the command:</p>
+<p><strong>KIT:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>slurm/KIT_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>~/git/ituna/.cache
+</pre></div>
+</div>
+<p><strong>JUWELS:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>~/git/ituna/.cache
+</pre></div>
+</div>
+<p>Alternatively, with more compute ressources:</p>
+<p><strong>KIT: 4 GPUs, 20 tasks</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--gres<span class="o">=</span>gpu:full:4<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">20</span><span class="w"> </span>slurm/KIT_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>~/git/ituna/.cache
+</pre></div>
+</div>
+<p><strong>JUWELS: 4 GPUs, 20 tasks (8 slurm jobs)</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--array<span class="o">=</span><span class="m">1</span>-8<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">20</span><span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>~/git/ituna/.cache
+</pre></div>
+</div>
+<hr class="docutils" />
+<p>This directory contains scripts for submitting training jobs to different Slurm-managed clusters.</p>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h2>
+<p>Before running the submission scripts, please ensure your environment is set up correctly.</p>
+<section id="conda-installation">
+<h3>1. Conda Installation<a class="headerlink" href="#conda-installation" title="Link to this heading">#</a></h3>
+<p>The submission scripts rely on a Conda installation to activate the correct Python environment.</p>
+<ul class="simple">
+<li><p>The path to your Conda installation should be specified via the <code class="docutils literal notranslate"><span class="pre">CONDA_BASE_PATH</span></code> environment variable.</p></li>
+<li><p>If this variable is not set, it will default to <code class="docutils literal notranslate"><span class="pre">$HOME/miniconda3</span></code>.</p></li>
+<li><p>The name of the conda environment can be set with <code class="docutils literal notranslate"><span class="pre">CONDA_ENV_NAME</span></code>, which defaults to <code class="docutils literal notranslate"><span class="pre">ituna</span></code>.</p></li>
+</ul>
+</section>
+<section id="environment-variables">
+<h3>2. Environment Variables<a class="headerlink" href="#environment-variables" title="Link to this heading">#</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">ituna</span></code> library, particularly the DataJoint backend, requires database credentials and other configuration to be set as environment variables.</p>
+<p>It is recommended to create a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file in the root of this repository to manage these variables. You can create this file by copying a template and filling in your specific values.</p>
+<p><strong>Example <code class="docutils literal notranslate"><span class="pre">.env</span></code> file:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># DataJoint database credentials</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DJ_HOST</span><span class="o">=</span><span class="s2">&quot;your-database-host&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DJ_USER</span><span class="o">=</span><span class="s2">&quot;your-username&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">DJ_PASS</span><span class="o">=</span><span class="s2">&quot;your-password&quot;</span>
+
+<span class="c1"># Path to Conda installation</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CONDA_BASE_PATH</span><span class="o">=</span><span class="s2">&quot;/path/to/your/miniconda3&quot;</span>
+
+<span class="c1"># Name of the Conda environment</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">CONDA_ENV_NAME</span><span class="o">=</span><span class="s2">&quot;ituna&quot;</span>
+</pre></div>
+</div>
+<p><strong>Important:</strong> Remember to source this file (e.g., <code class="docutils literal notranslate"><span class="pre">source</span> <span class="pre">.env</span></code>) in your shell before submitting a Slurm job, or add the source command to your <code class="docutils literal notranslate"><span class="pre">.bashrc</span></code> or <code class="docutils literal notranslate"><span class="pre">.zshrc</span></code> file to have the variables loaded automatically.</p>
+</section>
+</section>
+<section id="general-usage">
+<h2>General Usage<a class="headerlink" href="#general-usage" title="Link to this heading">#</a></h2>
+<p>The submission scripts are wrappers that execute any command you pass to them on the Slurm cluster. To use them, prepend <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">slurm/SCRIPT_NAME.sh</span></code> to the command you want to run.</p>
+<p>For example, to run the <code class="docutils literal notranslate"><span class="pre">ituna-fit-distributed-datajoint</span></code> command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>&lt;path-to-script&gt;<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>hippocampus-cebra-time-grid<span class="w"> </span>--schema-name<span class="w"> </span>ituna_cebra_v1<span class="w"> </span>--cache-dir<span class="w"> </span>/path/to/your/.cache
+</pre></div>
+</div>
+<p>See <code class="docutils literal notranslate"><span class="pre">ituna-fit-distributed-datajoint</span> <span class="pre">--help</span></code> for all available arguments.</p>
+</section>
+<section id="cluster-specific-scripts">
+<h2>Cluster-specific Scripts<a class="headerlink" href="#cluster-specific-scripts" title="Link to this heading">#</a></h2>
+<section id="kit-kit-run-sh">
+<h3>KIT (<code class="docutils literal notranslate"><span class="pre">KIT_run.sh</span></code>)<a class="headerlink" href="#kit-kit-run-sh" title="Link to this heading">#</a></h3>
+<p>This script is configured for the KIT cluster.</p>
+<section id="basic-example">
+<h4>Basic Example<a class="headerlink" href="#basic-example" title="Link to this heading">#</a></h4>
+<p>To run a sweep, prepend <code class="docutils literal notranslate"><span class="pre">sbatch</span> <span class="pre">slurm/KIT_run.sh</span></code> to your command:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>slurm/KIT_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+<p>This will use the default SLURM settings in the script (<code class="docutils literal notranslate"><span class="pre">--gres=gpu:full:1</span></code>).</p>
+</section>
+<section id="running-large-batch-jobs">
+<h4>Running Large Batch Jobs<a class="headerlink" href="#running-large-batch-jobs" title="Link to this heading">#</a></h4>
+<p>You can leverage Slurm to run many training jobs in parallel across multiple GPUs. This is controlled by the <code class="docutils literal notranslate"><span class="pre">--gres</span></code> and <code class="docutils literal notranslate"><span class="pre">--ntasks</span></code> options of <code class="docutils literal notranslate"><span class="pre">sbatch</span></code>.</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">--gres=gpu:full:X</span></code>: This requests <code class="docutils literal notranslate"><span class="pre">X</span></code> GPUs for your job. On the KIT cluster, <code class="docutils literal notranslate"><span class="pre">X</span></code> can be 1, 2, 3, or 4.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">--ntasks=Y</span></code>: This tells Slurm to run <code class="docutils literal notranslate"><span class="pre">Y</span></code> tasks (processes) for your job.</p></li>
+</ul>
+<p>The <code class="docutils literal notranslate"><span class="pre">KIT_run.sh</span></code> script will automatically distribute the <code class="docutils literal notranslate"><span class="pre">Y</span></code> tasks among the <code class="docutils literal notranslate"><span class="pre">X</span></code> available GPUs in a round-robin fashion. Each task will run the <code class="docutils literal notranslate"><span class="pre">ituna-fit-distributed-datajoint</span></code> command with the same arguments you provided.</p>
+<p><strong>Example:</strong></p>
+<p>Suppose you want to run 16 training jobs in parallel, distributed across 4 GPUs. You can submit the job as follows:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--gres<span class="o">=</span>gpu:full:4<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">16</span><span class="w"> </span>slurm/KIT_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+<p>In this case:</p>
+<ul class="simple">
+<li><p>Slurm allocates 4 GPUs to your job.</p></li>
+<li><p>Slurm starts 16 parallel tasks.</p></li>
+<li><p>The script assigns each task to one of the 4 GPUs. Each GPU will be shared by 4 tasks (<code class="docutils literal notranslate"><span class="pre">16</span> <span class="pre">tasks</span> <span class="pre">/</span> <span class="pre">4</span> <span class="pre">GPUs</span> <span class="pre">=</span> <span class="pre">4</span> <span class="pre">tasks</span> <span class="pre">per</span> <span class="pre">GPU</span></code>). The script manages this by setting the <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> environment variable for each task.</p></li>
+</ul>
+<p>This setup is ideal for hyperparameter sweeps where each job is independent. The <code class="docutils literal notranslate"><span class="pre">ituna-fit-distributed-datajoint</span></code> script with the <code class="docutils literal notranslate"><span class="pre">--order</span> <span class="pre">random</span></code> argument (the default) will ensure that each of the 16 parallel processes picks a different, random, unprocessed model from the sweep to train.</p>
+</section>
+</section>
+<section id="juwels-juwels-run-sh">
+<h3>JUWELS (<code class="docutils literal notranslate"><span class="pre">JUWELS_run.sh</span></code>)<a class="headerlink" href="#juwels-juwels-run-sh" title="Link to this heading">#</a></h3>
+<p>This script is configured for the JUWELS cluster.</p>
+<section id="id1">
+<h4>Basic Example<a class="headerlink" href="#id1" title="Link to this heading">#</a></h4>
+<p>The script has default values for a multi-GPU job (<code class="docutils literal notranslate"><span class="pre">--nodes=1</span></code>, which on JUWELS provides 4 GPUs, and <code class="docutils literal notranslate"><span class="pre">--ntasks=4</span></code>).</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+<p>You can override the number of tasks when submitting:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">1</span><span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+</section>
+<section id="slurm-configuration-notes">
+<h4>Slurm Configuration Notes<a class="headerlink" href="#slurm-configuration-notes" title="Link to this heading">#</a></h4>
+<ul class="simple">
+<li><p><strong>Account:</strong> You may need to edit the script to specify your account with <code class="docutils literal notranslate"><span class="pre">#SBATCH</span> <span class="pre">--account=&lt;your-account&gt;</span></code>. The script defaults to <code class="docutils literal notranslate"><span class="pre">hai_mechanistic</span></code>.</p></li>
+<li><p><strong>GPU Resources</strong>: All nodes on the <code class="docutils literal notranslate"><span class="pre">booster</span></code> and <code class="docutils literal notranslate"><span class="pre">develbooster</span></code> partitions are equipped with 4 A100 GPUs. You request resources per node (<code class="docutils literal notranslate"><span class="pre">--nodes=X</span></code>).</p></li>
+<li><p><strong>Partitions:</strong></p>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">booster</span></code>: For regular jobs. It’s recommended to specify a walltime with <code class="docutils literal notranslate"><span class="pre">--time=HH:MM:SS</span></code> to get your jobs started more quickly.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">develbooster</span></code>: For short, development jobs. This partition provides faster access but requires you to specify <code class="docutils literal notranslate"><span class="pre">--time=02:00:00</span></code> or less.</p></li>
+</ul>
+</li>
+<li><p><strong>Time Limit</strong>: It is always a good practice to specify a time limit for your job with <code class="docutils literal notranslate"><span class="pre">--time</span></code>.</p></li>
+</ul>
+</section>
+<section id="id2">
+<h4>Running Large Batch Jobs<a class="headerlink" href="#id2" title="Link to this heading">#</a></h4>
+<p>On JUWELS, <code class="docutils literal notranslate"><span class="pre">srun</span></code> automatically handles the distribution of tasks across the allocated GPUs. You do not need the manual <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> assignment that is used in the KIT script. Slurm’s process management will ensure that tasks are spread across the available GPUs.</p>
+<p>For example, if you request 1 node (which has 4 GPUs) and 20 tasks:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">20</span><span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+<p>Slurm will schedule the 20 <code class="docutils literal notranslate"><span class="pre">ituna-fit-distributed-datajoint</span></code> processes across the 4 GPUs, with each GPU handling 5 processes.</p>
+<section id="submitting-many-jobs-with-job-arrays">
+<h5>Submitting Many Jobs with Job Arrays<a class="headerlink" href="#submitting-many-jobs-with-job-arrays" title="Link to this heading">#</a></h5>
+<p>For very large sweeps, you can use Slurm’s job array feature to submit multiple jobs with a single command.</p>
+<p>A large submission could look like this:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>sbatch<span class="w"> </span>--array<span class="o">=</span><span class="m">1</span>-16<span class="w"> </span>--ntasks<span class="o">=</span><span class="m">20</span><span class="w"> </span>--time<span class="o">=</span><span class="m">08</span>:00:00<span class="w"> </span>slurm/JUWELS_run.sh<span class="w"> </span>ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;your-sweep-name&gt;
+</pre></div>
+</div>
+<p>This command submits a job array with 16 jobs. Each of these 16 jobs will:</p>
+<ul class="simple">
+<li><p>Run for a maximum of 8 hours.</p></li>
+<li><p>Request one node with 4 GPUs.</p></li>
+<li><p>Run 20 model training tasks in parallel, distributed across the 4 GPUs (5 tasks per GPU).</p></li>
+</ul>
+<p>In total, this would run <code class="docutils literal notranslate"><span class="pre">16</span> <span class="pre">jobs</span> <span class="pre">*</span> <span class="pre">20</span> <span class="pre">models/job</span> <span class="pre">=</span> <span class="pre">320</span></code> model trainings in parallel, assuming all jobs receive resources at the same time.</p>
+</section>
+</section>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./slurm"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tl-dr">TL;DR</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#conda-installation">1. Conda Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-variables">2. Environment Variables</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#general-usage">General Usage</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cluster-specific-scripts">Cluster-specific Scripts</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kit-kit-run-sh">KIT (<code class="docutils literal notranslate"><span class="pre">KIT_run.sh</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-example">Basic Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#running-large-batch-jobs">Running Large Batch Jobs</a></li>
+</ul>
+</li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#juwels-juwels-run-sh">JUWELS (<code class="docutils literal notranslate"><span class="pre">JUWELS_run.sh</span></code>)</a><ul class="nav section-nav flex-column">
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id1">Basic Example</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#slurm-configuration-notes">Slurm Configuration Notes</a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Running Large Batch Jobs</a><ul class="nav section-nav flex-column">
+<li class="toc-h5 nav-item toc-entry"><a class="reference internal nav-link" href="#submitting-many-jobs-with-job-arrays">Submitting Many Jobs with Job Arrays</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tobias Schmidt, Steffen Schneider
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

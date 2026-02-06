@@ -1,0 +1,895 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Backends: Caching and Distributed Computing &#8212; iTuna Documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../../_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css?v=9c3e77be" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.8ecb98da25f57f5357bf6f572d296f466b2cfe2517ffebfabe82451661e28f02.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="../../_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="../../_static/doctools.js?v=9a2dae69"></script>
+    <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../../_static/copybutton.js?v=f281be69"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js?v=1ae7504c"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../../_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="../../_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/tutorials/backends';</script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Demo: CEBRA Best Practices with iTuna" href="../demos/cebra_best_practices.html" />
+    <link rel="prev" title="Core Concepts" href="core.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../README.html">
+  
+  
+  
+  
+  
+  
+    <p class="title logo__title">iTuna Documentation</p>
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../README.html">
+                    🐟iTuna
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">Tutorials</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="quickstart.html">Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="core.html">Core Concepts</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Backends: Caching and Distributed Computing</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Demos</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../demos/cebra_best_practices.html">Demo: CEBRA Best Practices with iTuna</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../../_sources/docs/tutorials/backends.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Backends: Caching and Distributed Computing</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-backend-in-memory">Default Backend: In-Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#disk-cache-backend">Disk Cache Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-invalidation">Cache Invalidation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-cache-directory">Custom Cache Directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-caching">Shared Caching</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-context-managers">Using Context Managers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-backend">Distributed Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-mode">Auto Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-mode-for-hpc-clusters">Manual Mode (for HPC clusters)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cli-worker-commands">CLI Worker Commands</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datajoint-backend">DataJoint Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="backends-caching-and-distributed-computing">
+<h1>Backends: Caching and Distributed Computing<a class="headerlink" href="#backends-caching-and-distributed-computing" title="Link to this heading">#</a></h1>
+<p>Training multiple model instances for consistency evaluation can be computationally expensive. iTuna provides several backends to help:</p>
+<ol class="arabic simple">
+<li><p><strong>Disk caching</strong> - Avoid re-training identical models</p></li>
+<li><p><strong>Distributed execution</strong> - Train models in parallel across multiple processes</p></li>
+<li><p><strong>DataJoint integration</strong> - Database-backed caching for team collaboration</p></li>
+</ol>
+<p>This tutorial covers how to configure and use these backends.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">sklearn.decomposition</span><span class="w"> </span><span class="kn">import</span> <span class="n">FastICA</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">ituna</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/hkfs/home/haicore/hgf_hmgu/hgf_sfs7789/git/itune-ref/ituna/_backends/utils.py:22: UserWarning: config_dataclass is not available, saving/loading Configurable objects will not be available
+  warnings.warn(&quot;config_dataclass is not available, saving/loading Configurable objects will not be available&quot;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Sample data for all examples</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">42</span><span class="p">)</span>
+<span class="n">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randn</span><span class="p">(</span><span class="mi">1000</span><span class="p">,</span> <span class="mi">20</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="default-backend-in-memory">
+<h2>Default Backend: In-Memory<a class="headerlink" href="#default-backend-in-memory" title="Link to this heading">#</a></h2>
+<p>By default, iTuna uses the <code class="docutils literal notranslate"><span class="pre">in_memory</span></code> backend, which trains all models fresh each time without caching.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Check current configuration</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Current config:&quot;</span><span class="p">,</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Current config: {&#39;DEFAULT_BACKEND&#39;: &#39;in_memory&#39;, &#39;BACKEND_KWARGS&#39;: {}, &#39;CACHE_DIR&#39;: &#39;backend_store&#39;, &#39;FILE_LOCK_TIMEOUT&#39;: 30}
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="disk-cache-backend">
+<h2>Disk Cache Backend<a class="headerlink" href="#disk-cache-backend" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">disk_cache</span></code> backend saves trained models to disk. If you run the same model on the same data again, it loads from cache instead of re-training.</p>
+<p>This is extremely useful during exploratory analysis when you’re iterating on visualization or downstream analysis without changing the model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Enable disk caching globally</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;disk_cache&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Updated config:&quot;</span><span class="p">,</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Updated config: {&#39;DEFAULT_BACKEND&#39;: &#39;disk_cache&#39;, &#39;BACKEND_KWARGS&#39;: {}, &#39;CACHE_DIR&#39;: &#39;backend_store&#39;, &#39;FILE_LOCK_TIMEOUT&#39;: 30}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and fit an ensemble - models will be cached</span>
+<span class="n">ensemble</span> <span class="o">=</span> <span class="n">ituna</span><span class="o">.</span><span class="n">ConsistencyEnsemble</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">FastICA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">consistency_transform</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">PairwiseConsistency</span><span class="p">(</span>
+        <span class="n">indeterminacy</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">Permutation</span><span class="p">(),</span>
+    <span class="p">),</span>
+    <span class="n">random_states</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># First run: trains and caches models</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;First run (training):&quot;</span><span class="p">)</span>
+<span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">ensemble</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>First run (training):
+Score: 0.7096
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Second run: loads from cache (much faster)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Second run (loading from cache):&quot;</span><span class="p">)</span>
+<span class="n">ensemble2</span> <span class="o">=</span> <span class="n">ituna</span><span class="o">.</span><span class="n">ConsistencyEnsemble</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">FastICA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">consistency_transform</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">PairwiseConsistency</span><span class="p">(</span>
+        <span class="n">indeterminacy</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">Permutation</span><span class="p">(),</span>
+    <span class="p">),</span>
+    <span class="n">random_states</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">ensemble2</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">ensemble2</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Second run (loading from cache):
+Score: 0.7096
+</pre></div>
+</div>
+</div>
+</div>
+<section id="cache-invalidation">
+<h3>Cache Invalidation<a class="headerlink" href="#cache-invalidation" title="Link to this heading">#</a></h3>
+<p>The cache key is computed from:</p>
+<ul class="simple">
+<li><p>Model class and all hyperparameters</p></li>
+<li><p>Data hash</p></li>
+<li><p>Random state</p></li>
+</ul>
+<p>If you change <strong>any</strong> hyperparameter, it’s treated as a new model and will be trained fresh.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Changing max_iter creates a new cache entry</span>
+<span class="n">ensemble3</span> <span class="o">=</span> <span class="n">ituna</span><span class="o">.</span><span class="n">ConsistencyEnsemble</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">FastICA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">501</span><span class="p">),</span>  <span class="c1"># Different max_iter!</span>
+    <span class="n">consistency_transform</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">PairwiseConsistency</span><span class="p">(</span>
+        <span class="n">indeterminacy</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">Permutation</span><span class="p">(),</span>
+    <span class="p">),</span>
+    <span class="n">random_states</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;New hyperparameter - trains fresh:&quot;</span><span class="p">)</span>
+<span class="n">ensemble3</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">ensemble3</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>New hyperparameter - trains fresh:
+Score: 0.6284
+</pre></div>
+</div>
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+/home/hgf_hmgu/hgf_sfs7789/miniconda3/envs/ituna/lib/python3.10/site-packages/sklearn/decomposition/_fastica.py:127: ConvergenceWarning: FastICA did not converge. Consider increasing tolerance or the maximum number of iterations.
+  warnings.warn(
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="custom-cache-directory">
+<h3>Custom Cache Directory<a class="headerlink" href="#custom-cache-directory" title="Link to this heading">#</a></h3>
+<p>By default, models are cached in <code class="docutils literal notranslate"><span class="pre">./backend_store</span></code>. You can customize this:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Set custom cache directory</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CACHE_DIR</span> <span class="o">=</span> <span class="s2">&quot;./my_model_cache&quot;</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Cache directory: </span><span class="si">{</span><span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CACHE_DIR</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cache directory: ./my_model_cache
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="shared-caching">
+<h3>Shared Caching<a class="headerlink" href="#shared-caching" title="Link to this heading">#</a></h3>
+<p>The disk cache is robust to concurrent access, so you can:</p>
+<ul class="simple">
+<li><p>Share a cache directory across multiple notebooks</p></li>
+<li><p>Share a cache with collaborators (e.g., on a network drive)</p></li>
+</ul>
+<p>If someone has already trained a model with the same configuration on the same data, you’ll load their cached model instead of re-training.</p>
+</section>
+</section>
+<section id="using-context-managers">
+<h2>Using Context Managers<a class="headerlink" href="#using-context-managers" title="Link to this heading">#</a></h2>
+<p>Instead of changing global config, you can use context managers for temporary settings:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset to default</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;in_memory&quot;</span>
+
+<span class="c1"># Use disk cache only within this block</span>
+<span class="k">with</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">config_context</span><span class="p">(</span><span class="n">DEFAULT_BACKEND</span><span class="o">=</span><span class="s2">&quot;disk_cache&quot;</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Inside context:&quot;</span><span class="p">,</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;DEFAULT_BACKEND&quot;</span><span class="p">])</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Outside context:&quot;</span><span class="p">,</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">()[</span><span class="s2">&quot;DEFAULT_BACKEND&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Inside context: disk_cache
+Outside context: in_memory
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="distributed-backend">
+<h2>Distributed Backend<a class="headerlink" href="#distributed-backend" title="Link to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">disk_cache_distributed</span></code> backend trains models in parallel across multiple processes. This is useful when:</p>
+<ul class="simple">
+<li><p>You have a multi-core machine and want to utilize all cores</p></li>
+<li><p>Training many models (large <code class="docutils literal notranslate"><span class="pre">random_states</span></code> value)</p></li>
+</ul>
+<section id="auto-mode">
+<h3>Auto Mode<a class="headerlink" href="#auto-mode" title="Link to this heading">#</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">auto</span></code> mode, iTuna automatically spawns worker processes:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure distributed backend with auto workers</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;disk_cache_distributed&quot;</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">BACKEND_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;trigger_type&quot;</span><span class="p">:</span> <span class="s2">&quot;auto&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;num_workers&quot;</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span>  <span class="c1"># Number of parallel processes</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Distributed config:&quot;</span><span class="p">,</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">get_config</span><span class="p">())</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Distributed config: {&#39;DEFAULT_BACKEND&#39;: &#39;disk_cache_distributed&#39;, &#39;BACKEND_KWARGS&#39;: {&#39;trigger_type&#39;: &#39;auto&#39;, &#39;num_workers&#39;: 4}, &#39;CACHE_DIR&#39;: &#39;./my_model_cache&#39;, &#39;FILE_LOCK_TIMEOUT&#39;: 30}
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Train with 10 random states in parallel</span>
+<span class="n">ensemble_parallel</span> <span class="o">=</span> <span class="n">ituna</span><span class="o">.</span><span class="n">ConsistencyEnsemble</span><span class="p">(</span>
+    <span class="n">estimator</span><span class="o">=</span><span class="n">FastICA</span><span class="p">(</span><span class="n">n_components</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">max_iter</span><span class="o">=</span><span class="mi">500</span><span class="p">),</span>
+    <span class="n">consistency_transform</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">PairwiseConsistency</span><span class="p">(</span>
+        <span class="n">indeterminacy</span><span class="o">=</span><span class="n">ituna</span><span class="o">.</span><span class="n">metrics</span><span class="o">.</span><span class="n">Permutation</span><span class="p">(),</span>
+    <span class="p">),</span>
+    <span class="n">random_states</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="n">ensemble_parallel</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Score: </span><span class="si">{</span><span class="n">ensemble_parallel</span><span class="o">.</span><span class="n">score</span><span class="p">(</span><span class="n">X</span><span class="p">)</span><span class="si">:</span><span class="s2">.4f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Fitting models: 100%|██████████| 10/10 [00:04&lt;00:00,  2.46it/s, trained=10/10, errors=0, reserved=0, sweep_trained=10/10, sweep_errors=0, sweep_reserved=0]
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Score: 0.6479
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="manual-mode-for-hpc-clusters">
+<h3>Manual Mode (for HPC clusters)<a class="headerlink" href="#manual-mode-for-hpc-clusters" title="Link to this heading">#</a></h3>
+<p>In <code class="docutils literal notranslate"><span class="pre">manual</span></code> mode, iTuna prints a command that you can run on external compute nodes (e.g., SLURM jobs). This is ideal for HPC environments.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure manual distributed backend</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;disk_cache_distributed&quot;</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">BACKEND_KWARGS</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;trigger_type&quot;</span><span class="p">:</span> <span class="s2">&quot;manual&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sweep_type&quot;</span><span class="p">:</span> <span class="s2">&quot;constant&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;sweep_name&quot;</span><span class="p">:</span> <span class="s2">&quot;my_experiment_sweep&quot;</span><span class="p">,</span>
+<span class="p">}</span>
+
+<span class="c1"># When you call fit(), it will print the worker command</span>
+<span class="c1"># and wait for external workers to complete the training</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="cli-worker-commands">
+<h3>CLI Worker Commands<a class="headerlink" href="#cli-worker-commands" title="Link to this heading">#</a></h3>
+<p>iTuna provides command-line tools for running workers:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Local distributed backend</span>
+ituna-fit-distributed<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;uuid&gt;<span class="w"> </span>--cache-dir<span class="w"> </span>./backend_store
+
+<span class="c1"># With DataJoint backend</span>
+ituna-fit-distributed-datajoint<span class="w"> </span>--sweep-name<span class="w"> </span>&lt;uuid&gt;<span class="w"> </span>--schema-name<span class="w"> </span>myschema
+</pre></div>
+</div>
+<p>These can be submitted as SLURM jobs or run on any machine with access to the cache.</p>
+</section>
+</section>
+<section id="datajoint-backend">
+<h2>DataJoint Backend<a class="headerlink" href="#datajoint-backend" title="Link to this heading">#</a></h2>
+<p>For team collaboration with database-backed caching, use the DataJoint backend.</p>
+<section id="setup">
+<h3>Setup<a class="headerlink" href="#setup" title="Link to this heading">#</a></h3>
+<ol class="arabic">
+<li><p>Install DataJoint support:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ituna<span class="o">[</span>datajoint<span class="o">]</span>
+</pre></div>
+</div>
+</li>
+<li><p>Configure database credentials in <code class="docutils literal notranslate"><span class="pre">.env</span></code> (see <code class="docutils literal notranslate"><span class="pre">.env.template</span></code>):</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">DJ_HOST</span><span class="o">=</span><span class="n">your</span><span class="o">-</span><span class="n">database</span><span class="o">-</span><span class="n">host</span>
+<span class="n">DJ_USER</span><span class="o">=</span><span class="n">your</span><span class="o">-</span><span class="n">username</span>
+<span class="n">DJ_PASS</span><span class="o">=</span><span class="n">your</span><span class="o">-</span><span class="n">password</span>
+</pre></div>
+</div>
+</li>
+<li><p>Use the backend:</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># DataJoint backend configuration (requires setup)</span>
+<span class="c1"># config.DEFAULT_BACKEND = &quot;datajoint&quot;</span>
+<span class="c1"># config.BACKEND_KWARGS = {</span>
+<span class="c1">#     &quot;trigger_type&quot;: &quot;auto&quot;,</span>
+<span class="c1">#     &quot;num_workers&quot;: 4,</span>
+<span class="c1">#     &quot;schema_name&quot;: &quot;my_ituna_schema&quot;,</span>
+<span class="c1"># }</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="summary">
+<h2>Summary<a class="headerlink" href="#summary" title="Link to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Backend</p></th>
+<th class="head"><p>Use Case</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">in_memory</span></code></p></td>
+<td><p>Quick experiments, no caching needed</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">disk_cache</span></code></p></td>
+<td><p>Iterative analysis, avoid re-training</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">disk_cache_distributed</span></code></p></td>
+<td><p>Large sweeps, multi-core machines</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">datajoint</span></code></p></td>
+<td><p>Team collaboration, shared database</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Key configuration options:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">ituna</span>
+
+<span class="c1"># Set backend globally</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;disk_cache&quot;</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CACHE_DIR</span> <span class="o">=</span> <span class="s2">&quot;./my_cache&quot;</span>
+
+<span class="c1"># Or use context manager</span>
+<span class="k">with</span> <span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">config_context</span><span class="p">(</span><span class="n">DEFAULT_BACKEND</span><span class="o">=</span><span class="s2">&quot;disk_cache&quot;</span><span class="p">):</span>
+    <span class="n">ensemble</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">X</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Reset to defaults for clean state</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">DEFAULT_BACKEND</span> <span class="o">=</span> <span class="s2">&quot;in_memory&quot;</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">BACKEND_KWARGS</span> <span class="o">=</span> <span class="p">{}</span>
+<span class="n">ituna</span><span class="o">.</span><span class="n">config</span><span class="o">.</span><span class="n">CACHE_DIR</span> <span class="o">=</span> <span class="s2">&quot;backend_store&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./docs/tutorials"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="core.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Core Concepts</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../demos/cebra_best_practices.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Demo: CEBRA Best Practices with iTuna</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#default-backend-in-memory">Default Backend: In-Memory</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#disk-cache-backend">Disk Cache Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cache-invalidation">Cache Invalidation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#custom-cache-directory">Custom Cache Directory</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#shared-caching">Shared Caching</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#using-context-managers">Using Context Managers</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#distributed-backend">Distributed Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#auto-mode">Auto Mode</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-mode-for-hpc-clusters">Manual Mode (for HPC clusters)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cli-worker-commands">CLI Worker Commands</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#datajoint-backend">DataJoint Backend</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#setup">Setup</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary">Summary</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Tobias Schmidt, Steffen Schneider
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
