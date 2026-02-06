@@ -149,7 +149,7 @@ If you use 🐟iTuna in your research, please cite:
   author = {Schmidt, Tobias and Schneider, Steffen},
   title = {iTuna: Tune machine learning models for empirical identifiability and consistency},
   url = {https://github.com/dynamical-inference/ituna},
-  version = {0.3.2},
+  version = {0.1.0},
 }
 ```
 
