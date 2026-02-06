@@ -1,6 +1,10 @@
 title: iTuna Documentation
 author: Tobias Schmidt, Steffen Schneider
 
+html:
+  use_repository_button: true
+  use_issues_button: true
+
 repository:
   url: https://github.com/dynamical-inference/ituna
   branch: main

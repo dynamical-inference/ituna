@@ -1,19 +1,21 @@
-# 🐟iTuna
+# 🐟<b>i</b><span style="color: #3C92ED;">Tuna</span>
 
-**Tune machine learning models for empirical identifiability and consistency**
-
+[![iTuna](https://img.shields.io/badge/repo-🐟_iTuna-3C92ED?logo=github&logoColor=white)](https://github.com/dynamical-inference/ituna)
+[![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://dynamical-inference.github.io/ituna/)
 [![PyPI version](https://img.shields.io/pypi/v/ituna.svg)](https://pypi.org/project/ituna/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg)](https://pypi.org/project/ituna/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 [![Build](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml)
 
-## Why 🐟iTuna?
+**Tune machine learning models for empirical identifiability and consistency**
+
+## Why 🐟i<span style="color: #4D94E8;">Tuna</span>?
 
 Applying machine learning to scientific data analysis often suffers from an **identifiability gap**: many models along the data-to-analysis pipeline lack statistical guarantees about the uniqueness of their learned representations. This means that re-running the same algorithm can yield different embeddings, making downstream interpretation unreliable without manual verification.
 
 Identifiable representation learning addresses this by ensuring models recover representations that are unique up to a known class of transformations (permutation, linear, affine, etc.). However, even theoretically identifiable models need **empirical validation** to confirm they behave consistently in practice.
 
-🐟iTuna closes this gap by providing a lightweight, model-agnostic framework to:
+🐟i<span style="color: #4D94E8;">Tuna</span> closes this gap by providing a lightweight, model-agnostic framework to:
 
 1. Train multiple instances of a model with different random seeds
 2. Align their embeddings under the appropriate indeterminacy class
@@ -79,13 +81,15 @@ print("Embedding shape:", emb.shape)
 
 ## Documentation
 
+Full documentation is available at **[dynamical-inference.github.io/ituna](https://dynamical-inference.github.io/ituna/)**.
+
 - **Quickstart notebook**: [`docs/tutorials/quickstart.ipynb`](docs/tutorials/quickstart.ipynb) - minimal working example
 - **Core concepts**: [`docs/tutorials/core.ipynb`](docs/tutorials/core.ipynb) - in-depth walkthrough
 - **Backends**: [`docs/tutorials/backends.ipynb`](docs/tutorials/backends.ipynb) - caching and distributed execution
 
 ## Backends
 
-🐟iTuna supports different backends for caching and distributed computation:
+🐟i<span style="color: #4D94E8;">Tuna</span> supports different backends for caching and distributed computation:
 
 ```python
 from ituna import ConsistencyEnsemble, config, metrics
@@ -142,7 +146,7 @@ For the full development guide — branching conventions, code style, building d
 
 ## Citation
 
-If you use 🐟iTuna in your research, please cite:
+If you use 🐟i<span style="color: #4D94E8;">Tuna</span> in your research, please cite:
 
 ```bibtex
 @software{ituna,
@@ -155,4 +159,4 @@ If you use 🐟iTuna in your research, please cite:
 
 ## License
 
-🐟iTuna is released under the [MIT License](https://opensource.org/licenses/MIT).
+🐟i<span style="color: #4D94E8;">Tuna</span> is released under the [MIT License](https://opensource.org/licenses/MIT).

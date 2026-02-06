@@ -60,6 +60,7 @@ exclude = ["third_party*"]
 
 [project.urls]
 Homepage = "https://github.com/dynamical-inference/ituna"
+Documentation = "https://dynamical-inference.github.io/ituna/"
 Repository = "https://github.com/dynamical-inference/ituna.git"
 "Bug Tracker" = "https://github.com/dynamical-inference/ituna/issues"
 

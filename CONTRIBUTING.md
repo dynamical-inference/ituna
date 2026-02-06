@@ -1,6 +1,6 @@
-# Contributing to 🐟iTuna
+# Contributing to 🐟<b>i</b><span style="color: #3C92ED;">Tuna</span>
 
-Thank you for your interest in contributing to 🐟iTuna! This guide covers everything from setting up your development environment to publishing a new release.
+Thank you for your interest in contributing to 🐟<b>i</b><span style="color: #3C92ED;">Tuna</span>! This guide covers everything from setting up your development environment to publishing a new release.
 
 ## Development Setup
 
