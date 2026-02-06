@@ -9,7 +9,8 @@ description = "Tune machine learning models for empirical identifiability and co
 readme = "README.md"
 license = {text = "MIT"}
 authors = [
-    {name = "Tobias Schmidt", email = "tobi.schmidt@helmholtz-munich.de"}
+    {name = "Tobias Schmidt", email = "tobi.schmidt@helmholtz-munich.de"},
+    {name = "Steffen Schneider", email = "steffen.schneider@helmholtz-munich.de"}
 ]
 classifiers = [
     "Development Status :: 3 - Alpha",
@@ -21,6 +22,9 @@ classifiers = [
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 requires-python = ">=3.8"
