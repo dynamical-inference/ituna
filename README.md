@@ -159,4 +159,4 @@ If you use 🐟i<span style="color: #4D94E8;">Tuna</span> in your research, plea
 
 ## License
 
-🐟i<span style="color: #4D94E8;">Tuna</span> is released under the [MIT License](https://opensource.org/licenses/MIT).
+🐟i<span style="color: #4D94E8;">Tuna</span> is released under the [MIT License](./LICENSE). If you re-use parts of the iTuna code in your own package, please make sure to copy & paste the contents of the `LICENSE` file into a `NOTICE` in your repository.
