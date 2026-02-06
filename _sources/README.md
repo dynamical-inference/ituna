@@ -5,7 +5,7 @@
 [![PyPI version](https://img.shields.io/pypi/v/ituna.svg)](https://pypi.org/project/ituna/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg)](https://pypi.org/project/ituna/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
-[![Tests](https://github.com/dynamical-inference/ituna/actions/workflows/pytest.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/pytest.yml)
+[![Build](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml)
 
 ## Why 🐟iTuna?
 
@@ -80,8 +80,8 @@ print("Embedding shape:", emb.shape)
 ## Documentation
 
 - **Quickstart notebook**: [`docs/tutorials/quickstart.ipynb`](docs/tutorials/quickstart.ipynb) - minimal working example
-- **Reference walkthrough**: [`iTune Reference.ipynb`](iTune%20Reference.ipynb) - comprehensive tutorial
-- **Real-world examples**: [`ituna-experiments/`](ituna-experiments/) - experiments with CEBRA and other models
+- **Core concepts**: [`docs/tutorials/core.ipynb`](docs/tutorials/core.ipynb) - in-depth walkthrough
+- **Backends**: [`docs/tutorials/backends.ipynb`](docs/tutorials/backends.ipynb) - caching and distributed execution
 
 ## Backends
 
@@ -138,58 +138,7 @@ pytest tests -v
 pre-commit install
 ```
 
-### Building Documentation
-
-The documentation is built using [Jupyter Book](https://jupyterbook.org/). Note that version 2.x has a completely different build system, so we require version 1.x.
-
-#### Local Build
-
-```bash
-# Install jupyter-book (must be version <2)
-pip install "jupyter-book<2"
-
-# Build the docs from the project root
-jupyter-book build .
-
-# The HTML output will be in _build/html/
-# Open in browser:
-open _build/html/index.html  # macOS
-xdg-open _build/html/index.html  # Linux
-```
-
-#### Local Server
-
-To serve the docs locally with live preview:
-
-```bash
-# After building, start a local server
-cd _build/html
-python -m http.server 8080
-
-# Then open http://localhost:8080 in your browser
-```
-
-#### Using Docker (Recommended)
-
-For a consistent build environment with auto-rebuild on file changes, use the provided Docker setup:
-
-```bash
-# Build and run the docs server (includes watchexec for auto-rebuild)
-./build.sh
-
-# This will:
-# 1. Build the Docker image with all dependencies
-# 2. Mount the current directory into the container
-# 3. Build the docs and start a server at http://localhost:8000
-# 4. Watch for changes and automatically rebuild
-
-# Press Ctrl+C to stop
-```
-
-The Docker setup uses `entrypoint.sh` which:
-- Builds the Jupyter Book
-- Starts a local server on port 8000
-- Watches for changes to `.ipynb`, `.md`, `.yml`, and `.py` files and rebuilds automatically
+For the full development guide — branching conventions, code style, building docs, and the release process — see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Citation
 
