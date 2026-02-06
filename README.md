@@ -38,14 +38,14 @@ Think of it as a **unit test for reproducibility** of learned embeddings.
 ## Installation
 
 ```bash
-pip install ituna
+pip install git+https://github.com/dynamical-inference/ituna.git
 ```
 
 Optional extras:
 
 ```bash
-pip install ituna[datajoint]  # DataJoint backend for database-backed caching
-pip install ituna[dev]        # Development dependencies (pytest, etc.)
+pip install "git+https://github.com/dynamical-inference/ituna.git#egg=ituna[datajoint]"  # DataJoint backend for database-backed caching
+pip install "git+https://github.com/dynamical-inference/ituna.git#egg=ituna[dev]"        # Development dependencies (pytest, etc.)
 ```
 
 ## Quickstart
