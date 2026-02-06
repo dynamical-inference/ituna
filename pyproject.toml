@@ -48,6 +48,7 @@ dev = [
     "pre-commit>=3.0",
     "cebra>=0.5.0",
     "streamlit>=1.49.1",
+    "ruff"
 ]
 
 
