@@ -5,6 +5,12 @@ repository:
   url: https://github.com/dynamical-inference/ituna
   branch: main
 
+exclude_patterns:
+  - .github/*
+  - slurm/*
+  - third_party/*
+  - _build/*
+
 execute:
   execute_notebooks: "off"
   timeout: 300

@@ -9,3 +9,6 @@ parts:
   - caption: Demos
     chapters:
       - file: docs/demos/cebra_best_practices
+  - caption: Development
+    chapters:
+      - file: CONTRIBUTING
