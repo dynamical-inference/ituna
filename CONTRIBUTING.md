@@ -31,7 +31,8 @@ We follow a **release candidate (RC) branch model**:
 main              always releasable, protected
 feature/*         individual features or improvements
 fix/*             bug fixes
-rc/x.y.z         release candidates, created when preparing a release
+rc/x.y.z          release candidates, created when preparing a release
+*-rc              alternative RC naming (e.g., v1.2.3-rc)
 ```
 
 - **`main`** is the stable branch. Every commit on `main` should be in a releasable state. All changes go through pull requests.
@@ -80,7 +81,7 @@ ruff check --fix .
 Key style rules:
 - Line length: 160 characters
 - Import sorting: single-line imports, sorted within sections
-- Python target: 3.11
+- Python support: 3.8 - 3.14
 
 ## Running Tests
 
@@ -95,7 +96,15 @@ pytest tests/test_metrics.py -v
 pytest tests/ -v --cov=ituna
 ```
 
-The CI pipeline tests against Python 3.10 and 3.11.
+### CI Testing Strategy
+
+The CI pipeline tests different Python versions depending on the context:
+
+- **Regular PRs**: Tests only Python **3.11** for fast feedback
+- **Release candidate PRs** (branches starting with `rc/` or ending with `-rc`): Tests the full matrix **3.8 - 3.14**
+- **Push to main**: Tests the full matrix **3.8 - 3.14**
+
+This strategy keeps PR checks fast while ensuring comprehensive testing before releases.
 
 ## Documentation
 
