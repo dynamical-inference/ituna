@@ -61,7 +61,7 @@
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="prev" title="Demo: CEBRA Best Practices with iTuna" href="docs/demos/cebra_best_practices.html" />
+    <link rel="prev" title="CEBRA Best Practices with 🐟iTuna" href="docs/demos/cebra_best_practices.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -181,7 +181,7 @@
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Demos</span></p>
 <ul class="nav bd-sidenav">
-<li class="toctree-l1"><a class="reference internal" href="docs/demos/cebra_best_practices.html">Demo: CEBRA Best Practices with iTuna</a></li>
+<li class="toctree-l1"><a class="reference internal" href="docs/demos/cebra_best_practices.html">CEBRA Best Practices with 🐟<b>i</b><span style="color: #3C92ED;">Tuna</span></a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Development</span></p>
 <ul class="current nav bd-sidenav">
@@ -385,7 +385,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#branching-conventions">Branching Conventions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-changes">Making Changes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-style">Code Style</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-tests">Running Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-tests">Running Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ci-testing-strategy">CI Testing Strategy</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docs-structure">Docs Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-build">Local Build</a></li>
@@ -447,7 +450,8 @@ pip<span class="w"> </span>install<span class="w"> </span>-r<span class="w"> </s
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">main</span>              <span class="n">always</span> <span class="n">releasable</span><span class="p">,</span> <span class="n">protected</span>
 <span class="n">feature</span><span class="o">/*</span>         <span class="n">individual</span> <span class="n">features</span> <span class="ow">or</span> <span class="n">improvements</span>
 <span class="n">fix</span><span class="o">/*</span>             <span class="n">bug</span> <span class="n">fixes</span>
-<span class="n">rc</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">z</span>         <span class="n">release</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">created</span> <span class="n">when</span> <span class="n">preparing</span> <span class="n">a</span> <span class="n">release</span>
+<span class="n">rc</span><span class="o">/</span><span class="n">x</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">z</span>          <span class="n">release</span> <span class="n">candidates</span><span class="p">,</span> <span class="n">created</span> <span class="n">when</span> <span class="n">preparing</span> <span class="n">a</span> <span class="n">release</span>
+<span class="o">*-</span><span class="n">rc</span>              <span class="n">alternative</span> <span class="n">RC</span> <span class="n">naming</span> <span class="p">(</span><span class="n">e</span><span class="o">.</span><span class="n">g</span><span class="o">.</span><span class="p">,</span> <span class="n">v1</span><span class="mf">.2.3</span><span class="o">-</span><span class="n">rc</span><span class="p">)</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -496,7 +500,7 @@ ruff<span class="w"> </span>check<span class="w"> </span>--fix<span class="w"> <
 <ul class="simple">
 <li><p>Line length: 160 characters</p></li>
 <li><p>Import sorting: single-line imports, sorted within sections</p></li>
-<li><p>Python target: 3.11</p></li>
+<li><p>Python support: 3.8 - 3.14</p></li>
 </ul>
 </section>
 <section id="running-tests">
@@ -511,7 +515,16 @@ pytest<span class="w"> </span>tests/test_metrics.py<span class="w"> </span>-v
 pytest<span class="w"> </span>tests/<span class="w"> </span>-v<span class="w"> </span>--cov<span class="o">=</span>ituna
 </pre></div>
 </div>
-<p>The CI pipeline tests against Python 3.10 and 3.11.</p>
+<section id="ci-testing-strategy">
+<h3>CI Testing Strategy<a class="headerlink" href="#ci-testing-strategy" title="Link to this heading">#</a></h3>
+<p>The CI pipeline tests different Python versions depending on the context:</p>
+<ul class="simple">
+<li><p><strong>Regular PRs</strong>: Tests only Python <strong>3.11</strong> for fast feedback</p></li>
+<li><p><strong>Release candidate PRs</strong> (branches starting with <code class="docutils literal notranslate"><span class="pre">rc/</span></code> or ending with <code class="docutils literal notranslate"><span class="pre">-rc</span></code>): Tests the full matrix <strong>3.8 - 3.14</strong></p></li>
+<li><p><strong>Push to main</strong>: Tests the full matrix <strong>3.8 - 3.14</strong></p></li>
+</ul>
+<p>This strategy keeps PR checks fast while ensuring comprehensive testing before releases.</p>
+</section>
 </section>
 <section id="documentation">
 <h2>Documentation<a class="headerlink" href="#documentation" title="Link to this heading">#</a></h2>
@@ -726,7 +739,7 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;i
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Demo: CEBRA Best Practices with iTuna</p>
+        <p class="prev-next-title">CEBRA Best Practices with 🐟<b>i</b><span style="color: #3C92ED;">Tuna</span></p>
       </div>
     </a>
 </div>
@@ -749,7 +762,10 @@ python<span class="w"> </span>-c<span class="w"> </span><span class="s2">&quot;i
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#branching-conventions">Branching Conventions</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#making-changes">Making Changes</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#code-style">Code Style</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-tests">Running Tests</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#running-tests">Running Tests</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ci-testing-strategy">CI Testing Strategy</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#documentation">Documentation</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#docs-structure">Docs Structure</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-build">Local Build</a></li>

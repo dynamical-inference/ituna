@@ -412,7 +412,7 @@ document.write(`
 <a class="reference external" href="https://dynamical-inference.github.io/ituna/"><img alt="Documentation" src="https://img.shields.io/badge/docs-latest-blue" /></a>
 <a class="reference external" href="https://pypi.org/project/ituna/"><img alt="PyPI version" src="https://img.shields.io/pypi/v/ituna.svg" /></a>
 <a class="reference external" href="https://pypi.org/project/ituna/"><img alt="Python versions" src="https://img.shields.io/pypi/pyversions/ituna.svg" /></a>
-<a class="reference external" href="https://opensource.org/licenses/MIT"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg" /></a>
+<a class="reference download internal" download="" href="_downloads/9879d6db96fd29134fc802214163b95a/LICENSE"><span class="xref download myst"><img alt="License" src="https://img.shields.io/badge/License-MIT-blue.svg" /></span></a>
 <a class="reference external" href="https://github.com/dynamical-inference/ituna/actions/workflows/build.yml"><img alt="Build" src="https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg" /></a></p>
 <p><strong>Tune machine learning models for empirical identifiability and consistency</strong></p>
 <section id="why-ituna">
@@ -446,12 +446,12 @@ document.write(`
 </section>
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Link to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ituna
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>git+https://github.com/dynamical-inference/ituna.git
 </pre></div>
 </div>
 <p>Optional extras:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>ituna<span class="o">[</span>datajoint<span class="o">]</span><span class="w">  </span><span class="c1"># DataJoint backend for database-backed caching</span>
-pip<span class="w"> </span>install<span class="w"> </span>ituna<span class="o">[</span>dev<span class="o">]</span><span class="w">        </span><span class="c1"># Development dependencies (pytest, etc.)</span>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;git+https://github.com/dynamical-inference/ituna.git#egg=ituna[datajoint]&quot;</span><span class="w">  </span><span class="c1"># DataJoint backend for database-backed caching</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;git+https://github.com/dynamical-inference/ituna.git#egg=ituna[dev]&quot;</span><span class="w">        </span><span class="c1"># Development dependencies (pytest, etc.)</span>
 </pre></div>
 </div>
 </section>
@@ -563,7 +563,7 @@ pre-commit<span class="w"> </span>install
 </section>
 <section id="license">
 <h2>License<a class="headerlink" href="#license" title="Link to this heading">#</a></h2>
-<p>🐟i<span style="color: #4D94E8;">Tuna</span> is released under the <a class="reference external" href="https://opensource.org/licenses/MIT">MIT License</a>.</p>
+<p>🐟i<span style="color: #4D94E8;">Tuna</span> is released under the <a class="reference download internal" download="" href="_downloads/9879d6db96fd29134fc802214163b95a/LICENSE"><span class="xref download myst">MIT License</span></a>. If you re-use parts of the iTuna code in your own package, please make sure to copy &amp; paste the contents of the <code class="docutils literal notranslate"><span class="pre">LICENSE</span></code> file into a <code class="docutils literal notranslate"><span class="pre">NOTICE</span></code> in your repository.</p>
 </section>
 <div class="toctree-wrapper compound">
 </div>

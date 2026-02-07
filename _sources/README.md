@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://dynamical-inference.github.io/ituna/)
 [![PyPI version](https://img.shields.io/pypi/v/ituna.svg)](https://pypi.org/project/ituna/)
 [![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg)](https://pypi.org/project/ituna/)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Build](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml)
 
 **Tune machine learning models for empirical identifiability and consistency**
@@ -38,14 +38,14 @@ Think of it as a **unit test for reproducibility** of learned embeddings.
 ## Installation
 
 ```bash
-pip install ituna
+pip install git+https://github.com/dynamical-inference/ituna.git
 ```
 
 Optional extras:
 
 ```bash
-pip install ituna[datajoint]  # DataJoint backend for database-backed caching
-pip install ituna[dev]        # Development dependencies (pytest, etc.)
+pip install "git+https://github.com/dynamical-inference/ituna.git#egg=ituna[datajoint]"  # DataJoint backend for database-backed caching
+pip install "git+https://github.com/dynamical-inference/ituna.git#egg=ituna[dev]"        # Development dependencies (pytest, etc.)
 ```
 
 ## Quickstart
@@ -159,4 +159,4 @@ If you use 🐟i<span style="color: #4D94E8;">Tuna</span> in your research, plea
 
 ## License
 
-🐟i<span style="color: #4D94E8;">Tuna</span> is released under the [MIT License](https://opensource.org/licenses/MIT).
+🐟i<span style="color: #4D94E8;">Tuna</span> is released under the [MIT License](./LICENSE). If you re-use parts of the iTuna code in your own package, please make sure to copy & paste the contents of the `LICENSE` file into a `NOTICE` in your repository.
