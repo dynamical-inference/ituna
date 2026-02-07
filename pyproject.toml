@@ -33,9 +33,7 @@ dependencies = [
     "torch",
     "scipy",
     "scikit-learn",
-    "matplotlib",
     "pandas",
-    "igraph",
     "tqdm",
     "python-dotenv",
     "filelock>=3.0.0",
@@ -47,12 +45,16 @@ datajoint = ["datajoint<2"]
 dev = [
     "pytest>=6.0",
     "pytest-cov>=2.0",
-    "black>=21.0",
-    "flake8>=3.8",
     "pre-commit>=3.0",
-    "cebra>=0.5.0",
-    "streamlit>=1.49.1",
+    "cebra>=0.4.0",
     "ruff"
+]
+docs = [
+    "matplotlib",
+    "cebra[datasets,demos]>=0.4.0",
+]
+dashboard = [
+    "streamlit>=1.49.1",
 ]
 
 
