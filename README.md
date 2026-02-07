@@ -2,8 +2,8 @@
 
 [![iTuna](https://img.shields.io/badge/repo-🐟_iTuna-3C92ED?logo=github&logoColor=white)](https://github.com/dynamical-inference/ituna)
 [![Documentation](https://img.shields.io/badge/docs-latest-blue)](https://dynamical-inference.github.io/ituna/)
-[![PyPI version](https://img.shields.io/pypi/v/ituna.svg)](https://pypi.org/project/ituna/)
-[![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg)](https://pypi.org/project/ituna/)
+[![PyPI version](https://img.shields.io/pypi/v/ituna.svg?cacheSeconds=3600)](https://pypi.org/project/ituna/)
+[![Python versions](https://img.shields.io/pypi/pyversions/ituna.svg?cacheSeconds=3600)](https://pypi.org/project/ituna/)
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
 [![Build](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml/badge.svg)](https://github.com/dynamical-inference/ituna/actions/workflows/build.yml)
 
