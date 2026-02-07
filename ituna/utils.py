@@ -1,7 +1,6 @@
 from typing import Tuple
 
 import numpy as np
-import torch
 import typeguard
 
 
@@ -83,21 +82,3 @@ def dense_to_sparse(dense_array: np.ndarray, symmetric: bool = False) -> Tuple[n
 
     values = dense_array[indices[:, 0], indices[:, 1]]
     return indices, values
-
-
-def l2_normalize_columns(x: torch.Tensor, y: torch.Tensor, eps: float = 1e-8) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Normalize each column of x and y to unit L2 norm.
-    """
-    x_norm = x / (x.norm(dim=0, keepdim=True) + eps)
-    y_norm = y / (y.norm(dim=0, keepdim=True) + eps)
-    return x_norm, y_norm
-
-
-def mean_center_columns(x: torch.Tensor, y: torch.Tensor) -> Tuple[torch.Tensor, torch.Tensor]:
-    """
-    Subtract the column-wise mean from x and y.
-    """
-    x_centered = x - x.mean(dim=0, keepdim=True)
-    y_centered = y - y.mean(dim=0, keepdim=True)
-    return x_centered, y_centered
