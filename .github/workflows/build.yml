@@ -7,20 +7,35 @@ on:
     branches: [ main ]
 
 jobs:
+  resolve-matrix:
+    runs-on: ubuntu-latest
+    outputs:
+      python-versions: ${{ steps.set-matrix.outputs.python-versions }}
+    steps:
+      - name: Determine Python versions to test
+        id: set-matrix
+        run: |
+          FULL='["3.8", "3.9", "3.10", "3.11", "3.12", "3.13", "3.14"]'
+          MINIMAL='["3.11"]'
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            # Push to main: full matrix
+            echo "python-versions=$FULL" >> "$GITHUB_OUTPUT"
+          elif [[ "${{ github.head_ref }}" == rc/* || "${{ github.head_ref }}" == *-rc ]]; then
+            # Release candidate PR: full matrix
+            echo "python-versions=$FULL" >> "$GITHUB_OUTPUT"
+          else
+            # Regular PR: minimal
+            echo "python-versions=$MINIMAL" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: resolve-matrix
     timeout-minutes: 30
     strategy:
       fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        python-version: ["3.10", "3.11"]
-        include:
-          # Oldest supported Python version
-          - os: ubuntu-latest
-            python-version: "3.10"
-          # Latest supported Python version
-          - os: ubuntu-latest
-            python-version: "3.11"
+        python-version: ${{ fromJSON(needs.resolve-matrix.outputs.python-versions) }}
 
     runs-on: ${{ matrix.os }}
     name: Build (Python ${{ matrix.python-version }}, ${{ matrix.os }})
