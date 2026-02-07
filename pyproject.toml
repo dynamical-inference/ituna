@@ -63,7 +63,7 @@ dashboard = [
 version = {attr = "ituna.__version__"}
 
 [tool.setuptools.packages.find]
-exclude = ["third_party*"]
+exclude = ["third_party*", "tests*"]
 
 [project.urls]
 Homepage = "https://github.com/dynamical-inference/ituna"
