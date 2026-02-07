@@ -1,0 +1,11 @@
+This product includes documentation that uses CEBRA demos,
+including:
+  - `docs/demos/cebra_best_practices.ipynb`
+
+CEBRA demos are licensed under the MIT License.
+Copyright (c) 2023 ECOLE POLYTECHNIQUE FÉDÉRALE DE LAUSANNE, Switzerland,
+Laboratory of Prof. Mackenzie W. Mathis (UPMWMATHIS) and original authors:
+Steffen Schneider, Jin H Lee, Mackenzie W Mathis. All rights reserved.
+
+See https://github.com/AdaptiveMotorControlLab/CEBRA-demos/blob/main/LICENSE
+for details.
