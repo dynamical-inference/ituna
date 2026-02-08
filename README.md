@@ -38,6 +38,11 @@ Think of it as a **unit test for reproducibility** of learned embeddings.
 ## Installation
 
 ```bash
+pip install ituna
+```
+
+or alternative install from source
+```bash
 pip install git+https://github.com/dynamical-inference/ituna.git
 ```
 
