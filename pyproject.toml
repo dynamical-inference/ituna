@@ -46,7 +46,10 @@ dev = [
     "pytest-cov>=2.0",
     "pre-commit>=3.0",
     "cebra>=0.4.0",
-    "ruff"
+    "ruff",
+     # Cebra requires pkg_resources, which is part of setuptools. 
+     # However, setuptools is not always installed by default anymore, so we need it here
+    "setuptools",
 ]
 docs = [
     "matplotlib",
