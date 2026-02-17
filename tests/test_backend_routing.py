@@ -208,4 +208,3 @@ def test_tutorial_route_pattern_distributed_fit_disk_cache_transforms(ica_data, 
             # Transform caching route should create transform cache files.
             transform_cache_files = list((cache_dir / "transforms").glob("*"))
             assert len(transform_cache_files) >= len(ensemble.estimators_)
-

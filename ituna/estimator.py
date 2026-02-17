@@ -238,13 +238,7 @@ class ConsistencyEnsemble(
             method="transform",
             model_class=self.estimator.__class__,
         )
-        if hasattr(transform_backend, "transform_models"):
-            return transform_backend.transform_models(self.estimators_, X)
-
-        results = []
-        for model in self.estimators_:
-            results.append(model.transform(X))
-        return results
+        return transform_backend.call_models(self.estimators_, "transform", X)
 
     def transform(self, X):
         """
