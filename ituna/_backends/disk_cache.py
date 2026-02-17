@@ -11,7 +11,6 @@ import typeguard
 from ituna import estimator
 from ituna import metrics
 from ituna._backends import base
-from ituna._backends import in_memory
 from ituna._backends import utils
 
 
@@ -24,6 +23,9 @@ class DiskCacheBackend(base.Backend):
 
         self.trained_models_cache = self.cache_dir / "trained_models"
         self.trained_models_cache.mkdir(parents=True, exist_ok=True)
+
+        self.transform_cache = self.cache_dir / "transforms"
+        self.transform_cache.mkdir(parents=True, exist_ok=True)
 
     def _hash_model(self, model, model_id: Optional[int] = None):
         # Only pass model_id if model is non-deterministic
@@ -52,6 +54,9 @@ class DiskCacheBackend(base.Backend):
             model = utils.load_model(model_path)
         except FileNotFoundError:
             model = None
+        if model is not None:
+            # store stable training identity for downstream cached transform calls
+            model._ituna_model_data_hash = model_data_hash
 
         return model
 
@@ -88,10 +93,6 @@ class DiskCacheBackend(base.Backend):
         """
         Fit models in the queue.
         """
-        if any(isinstance(model, metrics.ConsistencyTransform) for model in models):
-            # fall back to in memory backend for anything that is not a ConsistencyEnsemble
-            return in_memory.InMemoryBackend().fit_models(models, *args, **kwargs)
-
         data = utils.DataArguments(*args, **kwargs)
         trained_models = []
         for i, model in enumerate(models):
@@ -102,10 +103,37 @@ class DiskCacheBackend(base.Backend):
             if trained_model is None:
                 trained_model = model.fit(*data.args, **data.kwargs)
                 self._store_trained_model(trained_model, data, model_data_hash=model_data_hash)
+            trained_model._ituna_model_data_hash = model_data_hash
 
             trained_models.append(trained_model)
 
         return trained_models
+
+    def _hash_transform_call(self, model: sklearn.base.BaseEstimator, data: utils.DataArguments, model_id: Optional[int] = None) -> str:
+        model_data_hash = getattr(model, "_ituna_model_data_hash", None)
+        if model_data_hash is None:
+            model_data_hash = self._hash_model_data(model=model, data=data, model_id=model_id)
+        return utils.hash_str(f"transform:{model_data_hash}:{data.hash}")
+
+    def transform_models(
+        self,
+        models: List[sklearn.base.BaseEstimator],
+        *args,
+        **kwargs,
+    ) -> List[Any]:
+        """Transform data with per-model disk cache for transform outputs."""
+        data = utils.DataArguments(*args, **kwargs)
+        transformed_outputs = []
+        for i, model in enumerate(models):
+            transform_hash = self._hash_transform_call(model=model, data=data, model_id=i)
+            transform_path = self.transform_cache / transform_hash
+            try:
+                output = utils.load_data(transform_path)
+            except FileNotFoundError:
+                output = model.transform(*data.args, **data.kwargs)
+                utils.store_data(transform_path, output)
+            transformed_outputs.append(output)
+        return transformed_outputs
 
 
 @typeguard.typechecked
@@ -307,19 +335,35 @@ class DiskCacheDistributedBackend(DiskCacheBackend, base.DistributedComputationM
         """
 
         if any(isinstance(model, metrics.ConsistencyTransform) for model in models):
-            # fall back to in memory backend for anything that is not a ConsistencyEnsemble
-            return in_memory.InMemoryBackend().fit_models(models, *args, **kwargs)
+            # Keep consistency transform fitting local while still using disk cache.
+            local_cache_backend = DiskCacheBackend(cache_dir=self.cache_dir)
+            return local_cache_backend.fit_models(models, *args, **kwargs)
 
         data = utils.DataArguments(*args, **kwargs)
+        model_data_hashes = [self._hash_model_data(model, data, model_id=i) for i, model in enumerate(models)]
+
+        # Fast path: every requested model is already trained.
+        # This avoids unnecessary sweep registration and model/data re-storage
+        # during cache-only collection reruns.
+        cached_only = all((self.trained_models_cache / model_data_hash).with_suffix(".pkl").exists() for model_data_hash in model_data_hashes)
+        if cached_only:
+            return [self._retrieve_trained_model(model_data_hash) for model_data_hash in model_data_hashes]
 
         # add data to cache
         data_hash, _ = self._store_data(data)
 
-        training_queue = {self._hash_model_data(model, data, model_id=i): model for i, model in enumerate(models)}
+        training_queue = [(i, model_data_hash, model) for i, (model_data_hash, model) in enumerate(zip(model_data_hashes, models))]
+        missing_queue = [
+            (i, model_data_hash, model)
+            for i, model_data_hash, model in training_queue
+            if not (self.trained_models_cache / model_data_hash).with_suffix(".pkl").exists()
+        ]
+        if not missing_queue:
+            return [self._retrieve_trained_model(model_data_hash) for model_data_hash in model_data_hashes]
 
         sweep_name = self._get_sweep_name()
 
-        for i, (model_data_hash, model) in enumerate(training_queue.items()):
+        for i, model_data_hash, model in missing_queue:
             model_hash, _ = self._store_model(model, model_id=i)
             self._add_to_sweep(
                 model_hash=model_hash,
@@ -331,9 +375,9 @@ class DiskCacheDistributedBackend(DiskCacheBackend, base.DistributedComputationM
         self._trigger_sweep(sweep_name)
 
         # wait for sweep to finish
-        trained_models = self._collect_trained_models(sweep_name, list(training_queue.keys()))
+        self._collect_trained_models(sweep_name, [model_data_hash for _, model_data_hash, _ in missing_queue])
 
-        return trained_models
+        return [self._retrieve_trained_model(model_data_hash) for model_data_hash in model_data_hashes]
 
     def _get_sweep_status(
         self,
